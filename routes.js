@@ -2,6 +2,7 @@ const axios = require('axios');
 var routes = function(app) {
 
   app.post("/token", function(req, res) {
+    console.log("Client id: " + process.env.CLIENT_ID);
     if(!req.body.code || !req.body.redirect_url) {
       return res.status(400).send({"status": "error", "message": "Code and redirect url are required"});
     } else {
