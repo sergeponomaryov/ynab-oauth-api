@@ -2,10 +2,10 @@ const axios = require('axios');
 var routes = function(app) {
 
   app.post("/token", function(req, res) {
-    if(!req.body.code) {
-      return res.status(400).send({"status": "error", "message": "Code is required"});
+    if(!req.body.code || !req.body.redirect_url) {
+      return res.status(400).send({"status": "error", "message": "Code and redirect url are required"});
     } else {
-      axios.post(`https://app.youneedabudget.com/oauth/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${process.env.REDIRECT_URL}&grant_type=authorization_code&code=${req.body.code}`)
+      axios.post(`https://app.youneedabudget.com/oauth/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${req.body.redirect_url}&grant_type=authorization_code&code=${req.body.code}`)
       .then(response => {
         return res.send(response.data);
       }).catch(err => {
