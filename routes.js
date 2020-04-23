@@ -1,7 +1,19 @@
 const axios = require('axios');
+var cors = require('cors');
+var whitelist = ['https://currency-converter-for-ynab.glitch.me/', 'https://cc.lisik.dev']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 var routes = function(app) {
 
-  app.post("/token", function(req, res) {
+  app.post("/token", cors(corsOptions), function(req, res) {
     if(!req.body.code) {
       return res.status(400).send({"status": "error", "message": "Code is required"});
     } else {
@@ -14,7 +26,7 @@ var routes = function(app) {
     }
   });
   
-  app.post("/refresh", function(req, res) {
+  app.post("/refresh", cors(corsOptions), function(req, res) {
     if(!req.body.refresh_token) {
       return res.status(400).send({"status": "error", "message": "Refresh token is required"});
     } else {
